@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # 5001 portunu dışa açıyoruz, 5000 iç portu kullanmaya devam eder
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/moodmate
+
+    depends_on:
+      - mongo
+    volumes:
+      - .:/app
+
+  mongo:
+    image: mongo:5.0
+    container_name: moodmate-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    command: ["--bind_ip", "0.0.0.0"]
+
+volumes:
+  mongo-data:
